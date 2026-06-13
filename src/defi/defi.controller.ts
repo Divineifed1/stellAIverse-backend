@@ -71,6 +71,7 @@ export class DeFiController {
       health_factor: analytics.healthFactor,
       positions_by_protocol: analytics.positionsByProtocol,
       positions_by_type: analytics.positionsByType,
+      risk_score: 0, // Placeholder; would be calculated based on positions
     };
   }
 

@@ -35,6 +35,22 @@ export class LoginDto {
   password: string;
 }
 
+export class RefreshTokenDto {
+  @IsString()
+  @IsNotEmpty()
+  refreshToken: string;
+}
+
+export class TwoFactorVerifyDto {
+  @IsString()
+  @IsOptional()
+  code?: string;
+
+  @IsString()
+  @IsOptional()
+  backupCode?: string;
+}
+
 export class AuthStatusDto {
   isAuthenticated: boolean;
   user?: {

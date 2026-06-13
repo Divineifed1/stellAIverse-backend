@@ -37,7 +37,7 @@ export class RiskAssessmentService {
     const protocolRiskMetrics = await adapter.getRiskMetrics(
       position.wallet_address,
       position.token_symbol,
-      "ethereum",
+      
     );
 
     // Calculate risk components

@@ -15,29 +15,19 @@ import {
 } from "@nestjs/common";
 import { ApiTags, ApiBearerAuth, ApiOperation } from "@nestjs/swagger";
 import { Throttle } from "@nestjs/throttler";
-import { JwtAuthGuard } from "../../auth/guards/jwt-auth.guard";
-import { PortfolioOwnerGuard } from "../guards/portfolio-owner.guard";
-import { PortfolioService } from "../services/portfolio.service";
-import { RebalancingService } from "../services/rebalancing.service";
-import { PerformanceAnalyticsService } from "../services/performance-analytics.service";
-import { BacktestingService } from "../services/backtesting.service";
-import { MLPredictionService } from "../services/ml-prediction.service";
-import { CreatePortfolioDto, UpdatePortfolioDto } from "../dto/portfolio.dto";
-import {
-  CreateOptimizationDto,
-  ApproveOptimizationDto,
-} from "../dto/optimization.dto";
-import {
-  TriggerRebalancingDto,
-  ApproveRebalancingDto,
-  ExecuteRebalancingDto,
-} from "../dto/rebalancing.dto";
-import {
-  AddAssetToPortfolioDto,
-  UpdatePortfolioAssetDto,
-} from "../dto/portfolio-asset.dto";
-import { CreateBacktestDto } from "../dto/backtest.dto";
-import { GetPerformanceMetricsDto } from "../dto/performance.dto";
+import { JwtAuthGuard } from "src/auth/jwt.guard";
+import { PortfolioService } from "./services/portfolio.service";
+import { RebalancingService } from "./services/rebalancing.service";
+import { PerformanceAnalyticsService } from "./services/performance-analytics.service";
+import { BacktestingService } from "./services/backtesting.service";
+import { MLPredictionService } from "./services/ml-prediction.service";
+import { PortfolioOwnerGuard } from "./guards/portfolio-owner.guard";
+import { CreatePortfolioDto, UpdatePortfolioDto } from "./dto/portfolio.dto";
+import { AddAssetToPortfolioDto } from "./dto/portfolio-asset.dto";
+import { ApproveOptimizationDto, CreateOptimizationDto } from "./dto/optimization.dto";
+import { ExecuteRebalancingDto, TriggerRebalancingDto } from "./dto/rebalancing.dto";
+import { GetPerformanceMetricsDto } from "./dto/performance.dto";
+import { CreateBacktestDto } from "./dto/backtest.dto";
 
 @Controller("portfolio")
 @ApiTags("Portfolio Optimization")

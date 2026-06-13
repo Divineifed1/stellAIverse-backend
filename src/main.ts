@@ -120,15 +120,9 @@ async function bootstrap() {
     )
     .addTag("Authentication", "User authentication and authorization")
     .addTag("Users", "User management operations")
-    .addTag("Agents", "Agent discovery and management")
     .addTag("Oracle", "Oracle data submissions")
-    .addTag("Compute", "Compute job management")
     .addTag("Audit", "Audit trail and logging")
-    .addTag("Health", "Health checks and monitoring")
-    .addTag("Recommendations", "Recommendation engine")
     .addTag("Profile", "User profile management")
-    .addTag("WebSocket", "Real-time communication")
-    .addTag("Indexer", "Event indexing")
     .build();
 
   const document = SwaggerModule.createDocument(app, config, {

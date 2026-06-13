@@ -89,7 +89,7 @@ export class TransactionOptimizationService {
         error,
       );
       transaction.status = TransactionStatus.FAILED;
-      transaction.error_message = error.message;
+      transaction.error_message = error instanceof Error ? error.message : String(error);
       await this.transactionRepository.save(transaction);
       throw error;
     }
@@ -286,7 +286,6 @@ export class TransactionOptimizationService {
         position.wallet_address,
         position.token_symbol,
         position.current_amount,
-        "ethereum",
       );
 
       // Estimate gas
@@ -302,7 +301,6 @@ export class TransactionOptimizationService {
           position.wallet_address,
           position.token_symbol,
           position.borrowed_amount,
-          "ethereum",
         );
       }
 
@@ -377,6 +375,7 @@ export class TransactionOptimizationService {
         totalTransactions: 0,
         hasBundlingOpportunity: false,
         recommendations: [],
+        estimatedTotalSavings: 0,
       };
     }
 

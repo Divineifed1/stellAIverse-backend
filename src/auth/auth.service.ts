@@ -11,8 +11,6 @@ import { v4 as uuidv4 } from "uuid";
 import { JwtService } from "@nestjs/jwt";
 import { User } from "../user/entities/user.entity";
 import { RegisterDto, LoginDto } from "./dto/auth.dto";
-import { RewardService } from "../referral/reward.service";
-import { RewardTrigger } from "../referral/reward.entity";
 import { TokenBlacklistService } from "./token-blacklist.service";
 
 @Injectable()
@@ -21,7 +19,6 @@ export class AuthService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     private readonly jwtService: JwtService,
-    private readonly rewardService: RewardService,
     private readonly tokenBlacklist: TokenBlacklistService,
   ) {}
 
@@ -49,8 +46,7 @@ export class AuthService {
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     // Generate unique referral code for the new user
-    const userReferralCode =
-      await this.rewardService.generateUniqueReferralCode();
+    const userReferralCode = uuidv4().substring(0, 8).toUpperCase();
 
     // Check if a referral code was provided
     let referredBy: User | null = null;
@@ -77,14 +73,14 @@ export class AuthService {
     await this.userRepository.save(user);
 
     // Trigger reward logic if referred
-    if (user.referredById) {
-      // We don't await this to keep registration fast, but in many cases we might want to
-      this.rewardService
-        .handleTrigger(RewardTrigger.REGISTRATION, user.id)
-        .catch((err) => {
-          console.error("Failed to trigger registration reward", err);
-        });
-    }
+    // TODO: Implement reward service integration when available
+    // if (user.referredById) {
+    //   this.rewardService
+    //     .handleTrigger(RewardTrigger.REGISTRATION, user.id)
+    //     .catch((err) => {
+    //       console.error("Failed to trigger registration reward", err);
+    //     });
+    // }
 
     // Generate JWT token with jti for replay attack prevention
     const jti = uuidv4();

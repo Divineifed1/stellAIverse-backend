@@ -1,4 +1,3 @@
-import * as numeric from "numeric";
 
 /**
  * Modern Portfolio Theory (Markowitz) algorithms for portfolio optimization

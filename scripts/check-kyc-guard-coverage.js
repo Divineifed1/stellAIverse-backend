@@ -5,10 +5,7 @@ const repoRoot = path.resolve(__dirname, "..");
 const srcRoot = path.join(repoRoot, "src");
 const appModulePath = path.join(srcRoot, "app.module.ts");
 
-const allowedSkipKyc = new Set([
-  "src/compliance/compliance.controller.ts:submitKyc",
-  "src/compliance/compliance.controller.ts:getKycStatus",
-]);
+const allowedSkipKyc = new Set([]);
 
 function walkControllers(dir) {
   const entries = fs.readdirSync(dir, { withFileTypes: true });

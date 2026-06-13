@@ -1,21 +1,27 @@
 import { DataSource } from "typeorm";
 import { User } from "../user/entities/user.entity";
 import { EmailVerification } from "../auth/entities/email-verification.entity";
-import { IndexedEvent } from "../indexer/entities/indexed-event.entity";
+import { Wallet } from "../auth/entities/wallet.entity";
 import { SignedPayload } from "../oracle/entities/signed-payload.entity";
 import { SubmissionNonce } from "../oracle/entities/submission-nonce.entity";
 import { AgentEvent } from "../audit/entities/agent-event.entity";
 import { OracleSubmission } from "../audit/entities/oracle-submission.entity";
 import { ComputeResult } from "../audit/entities/compute-result.entity";
-import { RecommendationFeedback } from "../recommendation/entities/recommendation-feedback.entity";
-import { RecommendationInteraction } from "../recommendation/entities/recommendation-interaction.entity";
-import { Referral } from "../referral/entities/referral.entity";
-import { ReferralEvent } from "../referral/entities/referral-event.entity";
-import { Waitlist } from "../waitlist/entities/waitlist.entity";
-import { WaitlistEntry } from "../waitlist/entities/waitlist-entry.entity";
-import { WaitlistEvent } from "../waitlist/entities/waitlist-event.entity";
-import { Notification } from "../notification/entities/notification.entity";
-import { NotificationPreferences } from "../notification/entities/notification-preferences.entity";
+import { ProvenanceRecord } from "../audit/entities/provenance-record.entity";
+import { Portfolio } from "../portfolio/entities/portfolio.entity";
+import { PortfolioAsset } from "../portfolio/entities/portfolio-asset.entity";
+import { RiskProfile } from "../portfolio/entities/risk-profile.entity";
+import { OptimizationHistory } from "../portfolio/entities/optimization-history.entity";
+import { RebalancingEvent } from "../portfolio/entities/rebalancing-event.entity";
+import { PerformanceMetric } from "../portfolio/entities/performance-metric.entity";
+import { BacktestResult } from "../portfolio/entities/backtest-result.entity";
+import { DeFiPosition } from "../defi/entities/defi-position.entity";
+import { DeFiYieldRecord } from "../defi/entities/defi-yield-record.entity";
+import { DeFiTransaction } from "../defi/entities/defi-transaction.entity";
+import { DeFiYieldStrategy } from "../defi/entities/defi-yield-strategy.entity";
+import { DeFiRiskAssessment } from "../defi/entities/defi-risk-assessment.entity";
+import { Alert } from "../alerts/entities/alert.entity";
+import { AlertTriggerLog } from "../alerts/entities/alert-trigger-log.entity";
 
 export default new DataSource({
   type: "postgres",
@@ -25,21 +31,27 @@ export default new DataSource({
   entities: [
     User,
     EmailVerification,
-    IndexedEvent,
+    Wallet,
     SignedPayload,
     SubmissionNonce,
     AgentEvent,
     OracleSubmission,
     ComputeResult,
-    RecommendationFeedback,
-    RecommendationInteraction,
-    Referral,
-    ReferralEvent,
-  Waitlist,
-  WaitlistEntry,
-  WaitlistEvent,
-    Notification,
-    NotificationPreferences,
+    ProvenanceRecord,
+    Portfolio,
+    PortfolioAsset,
+    RiskProfile,
+    OptimizationHistory,
+    RebalancingEvent,
+    PerformanceMetric,
+    BacktestResult,
+    DeFiPosition,
+    DeFiYieldRecord,
+    DeFiTransaction,
+    DeFiYieldStrategy,
+    DeFiRiskAssessment,
+    Alert,
+    AlertTriggerLog,
   ],
   migrations: [`${__dirname}/../migrations/*{.ts,.js}`],
   synchronize: false, // Never use synchronize in production

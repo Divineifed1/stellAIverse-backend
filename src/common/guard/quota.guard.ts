@@ -7,11 +7,6 @@ import {
   Optional,
 } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
-import { RateLimiterService } from "../../quota/rate-limiter.service";
-import { DynamicRateLimitScalingService } from "../../quota/dynamic-rate-limit-scaling.service";
-import { PremiumFeatureBonusService } from "../../quota/premium-feature-bonus.service";
-import { AnalyticsDashboardService } from "../../observability/analytics-dashboard.service";
-import { MetricsService } from "../../observability/metrics.service";
 import {
   RATE_LIMIT_KEY,
   RateLimitOptions,
@@ -20,22 +15,32 @@ import { QUOTA_LEVELS, DEFAULT_QUOTA } from "../../config/quota.config";
 
 @Injectable()
 export class QuotaGuard implements CanActivate {
+  private metrics?: any;
+  private dynamicScaling?: any;
+  private analytics?: any;
+  private premiumBonus?: any;
+  private rateLimiterService?: any;
+
   constructor(
     private readonly reflector: Reflector,
-    private readonly rateLimiterService: RateLimiterService,
-    @Optional()
-    private readonly dynamicScaling?: DynamicRateLimitScalingService,
-    @Optional()
-    private readonly premiumBonus?: PremiumFeatureBonusService,
-    @Optional() private readonly analytics?: AnalyticsDashboardService,
-    @Optional() private readonly metrics?: MetricsService,
-  ) {}
+    @Optional() metrics?: any,
+    @Optional() dynamicScaling?: any,
+    @Optional() analytics?: any,
+    @Optional() premiumBonus?: any,
+    @Optional() rateLimiterService?: any,
+  ) {
+    this.metrics = metrics;
+    this.dynamicScaling = dynamicScaling;
+    this.analytics = analytics;
+    this.premiumBonus = premiumBonus;
+    this.rateLimiterService = rateLimiterService;
+  }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const options = this.reflector.getAllAndOverride<RateLimitOptions>(
       RATE_LIMIT_KEY,
       [context.getHandler(), context.getClass()],
-    );
+    ) as RateLimitOptions | undefined;
 
     if (!options) {
       return true;
@@ -45,7 +50,7 @@ export class QuotaGuard implements CanActivate {
     const trackerKey = this.getTrackerKey(request);
 
     // Merge options with level config
-    const levelConfig = QUOTA_LEVELS[options.level || "free"] || DEFAULT_QUOTA;
+    const levelConfig = QUOTA_LEVELS[(options.level as string) || "free"] || DEFAULT_QUOTA;
     const baseLimit = options.limit ?? levelConfig.limit;
     const baseWindowMs = options.windowMs ?? levelConfig.windowMs;
     const baseBurst = options.burst ?? levelConfig.burst;
@@ -53,7 +58,7 @@ export class QuotaGuard implements CanActivate {
     const endpoint = request.route?.path || request.originalUrl || request.url || "unknown";
     const userId = String(request.user?.id || trackerKey);
     const userTier = request.user?.tier || options.level || "unknown";
-    const policy = options.level || "custom";
+    const policy = (options.level as string) || "custom";
 
     const dynamic = this.dynamicScaling?.getAdjustment({
       key: trackerKey,

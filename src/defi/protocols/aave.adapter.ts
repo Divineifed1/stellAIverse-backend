@@ -33,7 +33,7 @@ export class AaveAdapter implements ProtocolAdapter {
   name = "Aave";
   supportedChains = ["ethereum", "arbitrum", "polygon", "optimism"];
 
-  private providers: Map<string, ethers.Provider> = new Map();
+  private providers: Map<string, ethers.JsonRpcProvider> = new Map();
   private lendingPoolAddress = "0x7d2768dE32b0b80b7a3454c06BdAc94A69DDc7A9"; // Ethereum mainnet
   private rewardsControllerAddress =
     "0xd784927Ff2f95ba7a3F00302f7F038858F1b3c6e";
@@ -151,7 +151,7 @@ export class AaveAdapter implements ProtocolAdapter {
   ): Promise<TransactionData> {
     try {
       const provider = this.providers.get(chain);
-      const signer = provider.getSigner(address);
+      const signer = await provider.getSigner(address);
       const lendingPool = new ethers.Contract(
         this.lendingPoolAddress,
         AAVE_LENDING_POOL_ABI,
@@ -188,7 +188,7 @@ export class AaveAdapter implements ProtocolAdapter {
   ): Promise<TransactionData> {
     try {
       const provider = this.providers.get(chain);
-      const signer = provider.getSigner(address);
+      const signer = await provider.getSigner(address);
       const lendingPool = new ethers.Contract(
         this.lendingPoolAddress,
         AAVE_LENDING_POOL_ABI,
@@ -227,7 +227,7 @@ export class AaveAdapter implements ProtocolAdapter {
   ): Promise<TransactionData> {
     try {
       const provider = this.providers.get(chain);
-      const signer = provider.getSigner(address);
+      const signer = await provider.getSigner(address);
       const lendingPool = new ethers.Contract(
         this.lendingPoolAddress,
         AAVE_LENDING_POOL_ABI,
@@ -266,7 +266,7 @@ export class AaveAdapter implements ProtocolAdapter {
   ): Promise<TransactionData> {
     try {
       const provider = this.providers.get(chain);
-      const signer = provider.getSigner(address);
+      const signer = await provider.getSigner(address);
       const lendingPool = new ethers.Contract(
         this.lendingPoolAddress,
         AAVE_LENDING_POOL_ABI,
@@ -386,7 +386,7 @@ export class AaveAdapter implements ProtocolAdapter {
   ): Promise<TransactionData> {
     try {
       const provider = this.providers.get(chain);
-      const signer = provider.getSigner(address);
+      const signer = await provider.getSigner(address);
       const rewardsController = new ethers.Contract(
         this.rewardsControllerAddress,
         AAVE_REWARDS_CONTROLLER_ABI,
@@ -497,7 +497,7 @@ export class AaveAdapter implements ProtocolAdapter {
     } catch (error) {
       return {
         success: false,
-        error: error.message,
+        error: error instanceof Error ? error.message : String(error),
       };
     }
   }

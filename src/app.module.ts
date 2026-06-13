@@ -7,38 +7,31 @@ import { ThrottlerModule } from "@nestjs/throttler";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 
+// Modules
 import { AuthModule } from "./auth/auth.module";
 import { UserModule } from "./user/user.module";
 import { ProfileModule } from "./profile/profile.module";
-import { AgentModule } from "./agent/agent.module";
-import { RecommendationModule } from "./recommendation/recommendation.module";
-import { ComputeModule } from "./compute/compute.module";
-import { IndexerModule } from "./indexer/indexer.module";
 import { AuditModule } from "./audit/audit.module";
 import { OracleModule } from "./oracle/oracle.module";
-import { HealthModule } from "./health/health.module";
-import { QuotaModule } from "./quota/quota.module";
-import { ReferralModule } from "./referral/referral.module";
-import { WebSocketModule } from "./websocket/websocket.module";
-import { ObservabilityModule } from "./observability/observability.module";
-import { CrossChainModule } from "./cross-chain/cross-chain.module";
-import { PricePredictionModule } from "./price-prediction/price-prediction.module";
-import { RiskManagementModule } from "./risk-management/risk-management.module";
-import { ComplianceModule } from "./compliance/compliance.module";
-import { SocialTradingModule } from "./social-trading/social-trading.module";
 import { PortfolioModule } from "./portfolio/portfolio.module";
+import { RiskManagementModule } from "./risk-management/risk-management.module";
 import { DeFiModule } from "./defi/defi.module";
+import { AlertsModule } from "./alerts/alerts.module";
 
+// Auth entities
 import { User } from "./user/entities/user.entity";
 import { EmailVerification } from "./auth/entities/email-verification.entity";
+import { Wallet } from "./auth/entities/wallet.entity";
+
+// Oracle entities
 import { SignedPayload } from "./oracle/entities/signed-payload.entity";
 import { SubmissionNonce } from "./oracle/entities/submission-nonce.entity";
+
+// Audit entities
 import { AgentEvent } from "./audit/entities/agent-event.entity";
 import { ComputeResult } from "./audit/entities/compute-result.entity";
 import { ProvenanceRecord } from "./audit/entities/provenance-record.entity";
-import { Wallet } from "./auth/entities/wallet.entity";
-import { ReferralReward } from "./referral/reward.entity";
-import { Referral } from "./referral/entities/referral.entity";
+
 // Portfolio entities
 import { Portfolio } from "./portfolio/entities/portfolio.entity";
 import { PortfolioAsset } from "./portfolio/entities/portfolio-asset.entity";
@@ -55,33 +48,15 @@ import { DeFiTransaction } from "./defi/entities/defi-transaction.entity";
 import { DeFiYieldStrategy } from "./defi/entities/defi-yield-strategy.entity";
 import { DeFiRiskAssessment } from "./defi/entities/defi-risk-assessment.entity";
 
-import { QuotaGuard } from "./common/guard/quota.guard";
+// Alerts entities
+import { Alert } from "./alerts/entities/alert.entity";
+import { AlertTriggerLog } from "./alerts/entities/alert-trigger-log.entity";
+
+// Guards
+import { ThrottlerUserIpGuard } from "./common/guard/throttler.guard";
 import { RolesGuard } from "./common/guard/roles.guard";
 import { KycGuard } from "./common/guard/kyc.guard";
 import { SubmissionVerifierService } from "./oracle/submission-verifier.service";
-
-// New modules
-import { RewardEngineModule } from "./reward-engine/reward-engine.module";
-import { SchedulingModule } from "./scheduling/scheduling.module";
-import { AdminModule } from "./admin/admin.module";
-
-// New entities
-import { RewardRule } from "./reward-engine/entities/reward-rule.entity";
-import { RewardCalculation } from "./reward-engine/entities/reward-calculation.entity";
-import { TimeBasedEvent } from "./scheduling/entities/time-based-event.entity";
-import { EventParticipation } from "./scheduling/entities/event-participation.entity";
-import { WaitlistModule } from "./waitlist/waitlist.module";
-import { Waitlist } from "./waitlist/entities/waitlist.entity";
-import { WaitlistEntry } from "./waitlist/entities/waitlist-entry.entity";
-import { WaitlistEvent } from "./waitlist/entities/waitlist-event.entity";
-import { QuotaPolicy } from "./quota/policy.entity";
-import { AlertsModule } from "./alerts/alerts.module";
-import { Alert } from "./alerts/entities/alert.entity";
-import { AlertTriggerLog } from "./alerts/entities/alert-trigger-log.entity";
-import { LiquidityModule } from "./liquidity/liquidity.module";
-import { LiquidityPool } from "./liquidity/entities/liquidity-pool.entity";
-import { LpPosition } from "./liquidity/entities/lp-position.entity";
-import { StakingModule } from "./staking/staking.module";
 
 @Module({
   imports: [
@@ -109,14 +84,12 @@ import { StakingModule } from "./staking/staking.module";
           entities: [
             User,
             EmailVerification,
+            Wallet,
             SignedPayload,
             SubmissionNonce,
             AgentEvent,
             ComputeResult,
             ProvenanceRecord,
-            Wallet,
-            ReferralReward,
-            Referral,
             Portfolio,
             PortfolioAsset,
             RiskProfile,
@@ -129,18 +102,8 @@ import { StakingModule } from "./staking/staking.module";
             DeFiTransaction,
             DeFiYieldStrategy,
             DeFiRiskAssessment,
-            RewardRule,
-            RewardCalculation,
-            TimeBasedEvent,
-            EventParticipation,
-            Waitlist,
-            WaitlistEntry,
-            WaitlistEvent,
-            QuotaPolicy,
             Alert,
             AlertTriggerLog,
-            LiquidityPool,
-            LpPosition,
           ],
           synchronize: !isProduction,
           logging: isProduction ? ["error"] : ["error", "warn", "schema"],
@@ -166,31 +129,12 @@ import { StakingModule } from "./staking/staking.module";
     AuthModule,
     UserModule,
     ProfileModule,
-    AgentModule,
-    RecommendationModule,
-    ComputeModule,
-    WebSocketModule,
-    PortfolioModule,
-    DeFiModule,
-    ObservabilityModule,
-    IndexerModule,
     AuditModule,
     OracleModule,
-    HealthModule,
-    QuotaModule,
-    ReferralModule,
-    CrossChainModule,
-    PricePredictionModule,
+    PortfolioModule,
     RiskManagementModule,
-    ComplianceModule,
-    SocialTradingModule,
-    RewardEngineModule,
-    SchedulingModule,
-    AdminModule,
-    WaitlistModule,
+    DeFiModule,
     AlertsModule,
-    LiquidityModule,
-    StakingModule,
   ],
 
   controllers: [AppController],
@@ -200,10 +144,6 @@ import { StakingModule } from "./staking/staking.module";
     {
       provide: APP_GUARD,
       useClass: ThrottlerUserIpGuard,
-    },
-    {
-      provide: APP_GUARD,
-      useClass: QuotaGuard,
     },
     {
       provide: APP_GUARD,

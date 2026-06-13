@@ -105,5 +105,4 @@ export class TwoFactorAuth {
 
   @UpdateDateColumn()
   updatedAt: Date;
-}</content>
-<parameter name="filePath">/workspaces/stellAIverse-backend/src/auth/entities/auth.entity.ts
+}

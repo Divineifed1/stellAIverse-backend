@@ -209,7 +209,6 @@ export class PositionTrackingService {
       const currentData = await adapter.getPosition(
         position.wallet_address,
         position.token_symbol,
-        "ethereum",
       );
 
       // Update position
@@ -226,7 +225,6 @@ export class PositionTrackingService {
           const riskMetrics = await adapter.getRiskMetrics(
             position.wallet_address,
             position.token_symbol,
-            "ethereum",
           );
           // Calculate risk score from components
           position.risk_score = (Object.values(riskMetrics).reduce(

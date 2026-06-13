@@ -40,7 +40,7 @@ export class YieldOptimizationService {
         if (!adapter.supportedChains.includes(chain)) continue;
 
         try {
-          const apy = await adapter.getAPY(token, chain);
+          const apy = await adapter.getAPY(token);
           const metrics = await adapter.getProtocolMetrics();
 
           const opportunity: YieldOpportunity = {
@@ -56,7 +56,7 @@ export class YieldOptimizationService {
         } catch (error) {
           this.logger.warn(
             `Error fetching APY for ${adapter.name} ${token}`,
-            error.message,
+            error instanceof Error ? error.message : String(error),
           );
         }
       }
@@ -160,7 +160,7 @@ export class YieldOptimizationService {
     );
 
     // If drift exceeds threshold, rebalance
-    if (drift > (strategy.constraints?.maxDrift || 0.05)) {
+    if (drift > 0.05) {
       const opportunities = await this.findHighestYieldOpportunities(
         strategy.tokens,
       );
@@ -169,7 +169,7 @@ export class YieldOptimizationService {
         opportunities,
         strategy.current_value,
         {
-          maxRiskScore: strategy.constraints?.maxRiskScore,
+          maxRiskScore: strategy.max_risk_score,
           excludeProtocols: strategy.constraints?.excludeProtocols,
           preferredTokens: strategy.tokens,
         },
@@ -239,7 +239,7 @@ export class YieldOptimizationService {
       } catch (error) {
         this.logger.warn(
           `Error compounding rewards for position ${position.id}`,
-          error.message,
+          error instanceof Error ? error.message : String(error),
         );
       }
     }

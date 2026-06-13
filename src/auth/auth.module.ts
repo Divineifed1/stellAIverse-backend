@@ -4,7 +4,7 @@ import { PassportModule } from "@nestjs/passport";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ConfigModule } from "@nestjs/config";
 import { AuthController } from "./auth.controller";
-import { EnhancedAuthController, KycController } from "./enhanced-auth.controller";
+import { EnhancedAuthController } from "./enhanced-auth.controller";
 import { AuthService } from "./auth.service";
 import { EnhancedAuthService } from "./enhanced-auth.service";
 import { ChallengeService } from "./challenge.service";
@@ -28,20 +28,18 @@ import { User } from "../user/entities/user.entity";
 import { EmailVerification } from "./entities/email-verification.entity";
 import { Wallet } from "./entities/wallet.entity";
 import { RefreshToken, TwoFactorAuth } from "./entities/auth.entity";
-import { ReferralModule } from "../referral/referral.module";
 
 @Module({
   imports: [
     ConfigModule,
     PassportModule,
-    ReferralModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: "15m" },
     }),
     TypeOrmModule.forFeature([User, EmailVerification, Wallet, RefreshToken, TwoFactorAuth]),
   ],
-  controllers: [AuthController, EnhancedAuthController, KycController],
+  controllers: [AuthController, EnhancedAuthController],
   providers: [
     // Legacy services (for backward compatibility)
     AuthService,
