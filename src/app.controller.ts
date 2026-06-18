@@ -49,9 +49,7 @@ export class AppController {
     description: "Too many requests",
   })
   checkHealth() {
-    return this.health.check([
-      () => this.riskManagementHealth.isHealthy(),
-    ]);
+    return this.health.check([() => this.riskManagementHealth.isHealthy()]);
   }
 
   @Public()
