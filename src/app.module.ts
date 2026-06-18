@@ -19,7 +19,6 @@ import { PortfolioModule } from "./portfolio/portfolio.module";
 import { RiskManagementModule } from "./risk-management/risk-management.module";
 import { DeFiModule } from "./defi/defi.module";
 import { AlertsModule } from "./alerts/alerts.module";
-import { EventEmitterModule } from "@nestjs/event-emitter";
 
 // Auth entities
 import { User } from "./user/entities/user.entity";
@@ -112,14 +111,13 @@ import { SubmissionVerifierService } from "./oracle/submission-verifier.service"
 
     ThrottlerModule.forRoot({
       throttlers: [
-        { name: 'global',  ttl: 60_000, limit: 100 },
-        { name: 'auth',    ttl: 60_000, limit: 5   },
-        { name: 'trading', ttl: 60_000, limit: 20  },
-        { name: 'oracle',  ttl: 60_000, limit: 10  },
+        { name: "global", ttl: 60_000, limit: 100 },
+        { name: "auth", ttl: 60_000, limit: 5 },
+        { name: "trading", ttl: 60_000, limit: 20 },
+        { name: "oracle", ttl: 60_000, limit: 10 },
       ],
     }),
 
-    EventEmitterModule.forRoot(),
     TerminusModule,
 
     AuthModule,
