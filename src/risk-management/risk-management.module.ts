@@ -10,7 +10,15 @@ import { RiskManagementHealthIndicator } from "./risk-management.health-indicato
 @Module({
   imports: [AlertsModule],
   controllers: [RiskManagementController],
-  providers: [RiskManagementService, CircuitBreakerService, RiskManagementHealthIndicator],
-  exports: [RiskManagementService, CircuitBreakerService, RiskManagementHealthIndicator],
+  providers: [
+    RiskManagementService,
+    CircuitBreakerService,
+    RiskManagementHealthIndicator,
+  ],
+  exports: [
+    RiskManagementService,
+    CircuitBreakerService,
+    RiskManagementHealthIndicator,
+  ],
 })
 export class RiskManagementModule {}
