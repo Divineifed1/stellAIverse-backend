@@ -182,14 +182,14 @@ export class PortfolioController {
   })
   @UseGuards(PortfolioOwnerGuard)
   async checkRebalancing(@Param("portfolioId") portfolioId: string) {
-    const needed =
+    const needsRebalancing =
       await this.rebalancingService.checkRebalancingNeeded(portfolioId);
-    const drift =
+    const allocationDrift =
       await this.rebalancingService.calculateAllocationDrift(portfolioId);
 
     return {
-      needsRebalancing: needed,
-      allocationDrift: drift,
+      needsRebalancing,
+      allocationDrift,
     };
   }
 
@@ -207,6 +207,7 @@ export class PortfolioController {
       portfolioId,
       dto.trigger,
       dto.triggerReason,
+      dto.dryRun,
     );
   }
 
@@ -230,7 +231,19 @@ export class PortfolioController {
       rebalancingId,
       dto.actualCost,
       dto.executionSlippage,
+      dto.executionNotes,
     );
+  }
+
+  @Post("rebalancing/:rebalancingId/cancel")
+  @ApiOperation({
+    summary: "Cancel rebalancing event",
+  })
+  async cancelRebalancing(
+    @Param("rebalancingId") rebalancingId: string,
+    @Body() dto: CancelRebalancingDto,
+  ) {
+    return this.rebalancingService.cancelRebalancing(rebalancingId, dto.reason);
   }
 
   @Get("portfolios/:portfolioId/rebalancing-history")
